@@ -1,0 +1,6 @@
+METODI DI SALVATAGGIO DATI
+- LocalStorage (HTML5)
+- WebSQL (HTML5)
+- IndexedDB (HTML5)
+- File API (Phonegap)
+- Ajax (Webserver)
