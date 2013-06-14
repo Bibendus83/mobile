@@ -1,0 +1,7 @@
+http://api.jquerymobile.com/global-config/
+
+Temi fighi JQuery Mobile
+- https://github.com/ququplay/jquery-mobile-flat-ui-theme
+- http://driftyco.github.io/graphite/
+- http://nativedroid.godesign.ch/
+- https://github.com/taitems/iOS-Inspired-jQuery-Mobile-Theme
