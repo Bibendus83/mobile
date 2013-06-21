@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app>
+	<head>
+		<title>Sesta App - Touch</title>
+
+		<!-- Blocca lo scalare della risoluzione in base alle dimensioni del device -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style>
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/swipe.css" rel="stylesheet" type="text/css" />
+
+		<script type="text/javascript" src="js/cordova-2.4.0.js"></script>
+		<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
+		<script type="text/javascript" src="js/swipe.js"></script>
+
+		<script type="text/javascript">
+			$(function() {
+				$(".btn").on("click",slideMove);
+			});
+
+			function init() {
+				window.mySwype = Swipe($("#slider").get(0), {transitionEnd: pageChanged});
+			}
+
+
+			function pageChanged(i, elem) {
+				$("#points li").removeClass("active");
+				$("#points li").eq(i).addClass("active");
+			}
+
+
+
+			function slideMove(e) {
+				if ($(this).hasClass("right")) {
+					mySwype.next();
+				} else {
+					mySwype.prev();
+				}
+			}
+		</script>
+
+		<style>
+			#slider .swipe-wrap div {
+				height: 250px;
+				border: 1px solid #CCCCCC;
+				margin-top: 30px;
+				padding: 10px;
+				box-sizing: border-box;
+			}
+
+			#points li {
+				width: 15px;
+				height: 15px;
+				border-radius: 50%;
+				border: 1px solid #CCCCCC;
+				margin: 10px;
+				float: left;
+			}
+
+			#points:after {
+				content: "";
+				display: block;
+				clear: both;
+			}
+			#points li.active {
+				background-color: #9999CC;
+			}
+		</style>
+
+	</head>
+	<body onload="init();">
+		<div id='slider' class='swipe'>
+			<div class='swipe-wrap'>
+				<div>Pagina 1</div>
+				<div>Pagina 2</div>
+				<div>Pagina 3</div>
+			</div>
+		</div>
+		<ul id="points" class="unstyled">
+			<li class="active"></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<div id="buttons">
+			<button class="btn left">&lt;</button>
+			<button class="btn right">&gt;</button>
+		</div>
+	</body>
+</html>
