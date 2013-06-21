@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app>
 	<head>
-		<title>Sesta App - Touch</title>
+		<title>Settima App - Touch</title>
 
 		<!-- Blocca lo scalare della risoluzione in base alle dimensioni del device -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,42 +13,8 @@
 			}
 		</style>
 
-		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-		<link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
-		<link href="css/swipe.css" rel="stylesheet" type="text/css" />
-
-		<script type="text/javascript" src="js/cordova-2.4.0.js"></script>
-		<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
-		<script type="text/javascript" src="js/swipe.js"></script>
-
-		<script type="text/javascript">
-			$(function() {
-				$(".btn").on("click",slideMove);
-			});
-
-			function init() {
-				window.mySwype = Swipe($("#slider").get(0), {transitionEnd: pageChanged});
-			}
-
-
-			function pageChanged(i, elem) {
-				$("#points li").removeClass("active");
-				$("#points li").eq(i).addClass("active");
-			}
-
-
-
-			function slideMove(e) {
-				if ($(this).hasClass("right")) {
-					mySwype.next();
-				} else {
-					mySwype.prev();
-				}
-			}
-		</script>
-
 		<style>
-			#slider .swipe-wrap div {
+			#slider .swipe-wrap > div {
 				height: 250px;
 				border: 1px solid #CCCCCC;
 				margin-top: 30px;
@@ -56,7 +22,7 @@
 				box-sizing: border-box;
 			}
 
-			#points li {
+			#dots li {
 				width: 15px;
 				height: 15px;
 				border-radius: 50%;
@@ -65,26 +31,127 @@
 				float: left;
 			}
 
-			#points:after {
+			#dots:after {
 				content: "";
 				display: block;
 				clear: both;
 			}
-			#points li.active {
+			#dots li.active {
 				background-color: #9999CC;
 			}
 		</style>
 
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/swipe.css" rel="stylesheet" type="text/css" />
+
+		<script type="text/javascript" src="js/cordova-2.4.0.js"></script>
+		<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
+		<script type="text/javascript" src="js/swipe.js"></script>
+		<script type="text/javascript" src="js/handlebars.js"></script>
+
+
+		<script id="page-tpl" type="text/x-handlebars-template">
+			{{#each pages}}
+				<div>
+					<h1>{{this.title}}</h1>
+					<div>{{this.content}}</div>
+				</div>
+			{{/each}}
+		</script>
+
+		<script id="dots-tpl" type="text/x-handlebars-template">
+			{{#each pages}}
+				<li></li>
+			{{/each}}
+		</script>
+
+		<script type="text/javascript">
+			var testJson = {
+				pages:[
+					{
+						"title": "Pagina 1",
+						"content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+					},
+					{
+						"title": "Pagina 2",
+						"content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+					},
+					{
+						"title": "Pagina 3",
+						"content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+					},
+					{
+						"title": "Pagina 4",
+						"content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+					}
+				]
+			}
+
+			Handlebars.registerHelper('pages-helper', function(items, options) {
+				var out;
+
+				out+= "<div>";
+				for(var i=0; i < items.length; i++) {
+					out+= "<h1>" + options.fn(items[i].title) + "</h1>";
+					out+= "<div>" + options.fn(items[i].content) + "</div>";
+					if (items.length == 1) {
+						out+= "<button>EXIT</button>";
+					}
+				}
+				out+= "</div>";
+
+				return "</div>";
+			});
+
+			$(function() {
+				$(".btn").on("click",slideMove);
+
+				// Template Pages
+				var structure = document.getElementById("page-tpl").innerHTML;
+				var template = Handlebars.compile(structure);
+				var html = template(testJson);
+				$("#slider .swipe-wrap").html(html);
+
+				// Template dots
+				var structure = document.getElementById("dots-tpl").innerHTML;
+				var template = Handlebars.compile(structure);
+				var html = template(testJson);
+				$("#dots").html(html);
+
+
+				window.mySwype = Swipe($("#slider").get(0), {transitionEnd: refreshNavigation});
+				refreshNavigation(0);
+			});
+
+
+			function refreshNavigation(i, elem) {
+				$("#dots li").removeClass("active");
+				$("#dots li").eq(i).addClass("active");
+			}
+
+			function slideMove(e) {
+				if ($(this).hasClass("right")) {
+					mySwype.next();
+				} else {
+					mySwype.prev();
+				}
+			}
+
+
+		</script>
+
+
+
+
+
 	</head>
-	<body onload="init();">
+	<body>
 		<div id='slider' class='swipe'>
 			<div class='swipe-wrap'>
-				<div>Pagina 1</div>
-				<div>Pagina 2</div>
-				<div>Pagina 3</div>
 			</div>
 		</div>
-		<ul id="points" class="unstyled">
+		<ul id="dots" class="unstyled">
 			<li class="active"></li>
 			<li></li>
 			<li></li>
